@@ -1,0 +1,26 @@
+BEGIN:VCALENDAR
+PRODID:-//Google Inc//Google Calendar 70.9054//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20230816
+DTEND;VALUE=DATE:20230821
+DTSTAMP:20221103T221115Z
+ORGANIZER;CN=jonshuster@gmail.com:mailto:jonshuster@gmail.com
+UID:713v2ttp50kerdgb9e9i146led@google.com
+X-MICROSOFT-CDO-OWNERAPPTID:1903775497
+CLASS:PUBLIC
+CREATED:20221101T154024Z
+DESCRIPTION:Thank you for letting me know that you can join the trip to 
+Morzine for my birthday in August.<br><br>I'm currently aiming for the 
+trip to be from Wednesday 16th August until Sunday 20th August 2023. 
+Expect to hear more from me as I start to get an idea of numbers.
+LAST-MODIFIED:20221103T221114Z
+LOCATION:Morzine\, 74110 Morzine\, France
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:Jon's 40th Birthday
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR
