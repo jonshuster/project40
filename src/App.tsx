@@ -1,65 +1,82 @@
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import './assets/css/main.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCakeCandles } from '@fortawesome/free-solid-svg-icons'
 import HolidayDetails from './HolidayDetails';
 import RSVPComponents from "./RSVPComponents";
+import RSVPUpdate from "./RSVPUpdate";
 
 
 const App = () => {
-	useEffect(() => {        
+	useEffect(() => {
 		window.executeMainJs() // Part of the HTML Template, needs to be called after React has updated the DOM
 		document.body.classList.remove('is-preload'); // Part of the HTML Template, makes the banner 'fade in'
-    }, []);
+	}, []);
 	return (
-		<div className="App" id="page-wrapper">
-			{/* Header */}
-			<header id="header" className="alt">
-				<h1><a href="#banner">Jon's 40th</a></h1>
-				<nav>
-					<a href="#menu">Menu</a>
-				</nav>
-			</header>
+		<Router basename={'/project40'}>
+			<div className="App" id="page-wrapper">
+				{/* Header */}
+				<header id="header" className="alt">
+					<h1>Jon's 40th</h1>
+					<nav>
+						<Routes><Route path="/update/:uid" element={<a href="#menu">Menu</a>} /><Route path="*" element={<Fragment/>}/></Routes>
+					</nav>
+				</header>
 
-			{/* Menu */}
-			<nav id="menu">
-				<div className="inner">
-					<h2>Menu</h2>
-					<ul className="links">
-						<li><a href="#banner">Home</a></li>
-						<li><a href="#details">Details</a></li>
-						<li><a href="#rsvpForm">RSVP</a></li>
-						<li><a href="#guestlist">Guest List</a></li>
-					</ul>
-					<div className="close">Close</div>
-				</div>
-			</nav>
+				<Routes> 
+					<Route path="*" element={<Fragment/>}/> {/* Can't get Links on the Menu working with Anchors, tried HashLinks uts v6 forked versions :( */}
+					<Route path="/update/:uid" element={<Fragment>
+					{/* Menu */}
+					<nav id="menu">
+						<div className="inner">
+							<h2>Menu</h2>
 
-			{/* Banner */}
-			<section id="banner">
-				<div className="inner">
-					<div className="logo"><span className="icon"><FontAwesomeIcon icon={faCakeCandles} /></span></div>
-					<h2>Jon's 40th</h2>
-					<p>You're invited to come celebrate my birthday in Morzine!</p>
-				</div>
-			</section>
+							<ul className="links">
+								<li><Link to="../">Home</Link></li>
+							</ul>
 
-			{/* Main Content */}
-			<section id="wrapper">
-				<HolidayDetails />
-				<RSVPComponents />
-			</section>
+							<div className="close">Close</div>
+						</div>
+					</nav>
+				</Fragment>} />
+				</Routes>
 
-			{/* Footer */}
-			<section id="footer">
-				<div className="inner">
-					<ul className="copyright">
-						<li>&copy; <a href="http://www.jonshuster.co.uk">JONATHAN SHUSTER</a></li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
-				</div>
-			</section>
+				{/* Banner */}
+				<section id="banner">
+					<div className="inner">
+						<div className="logo"><span className="icon"><FontAwesomeIcon icon={faCakeCandles} /></span></div>
+						<h2>Jon's 40th</h2>
+						<p>You're invited to come celebrate my birthday in Morzine!</p>
+					</div>
+				</section>
 
-		</div>
+				{/* Main Content */}
+				<section id="wrapper">
+					<Routes>
+						<Route
+							path="*"
+							element={<Fragment><HolidayDetails /><RSVPComponents /></Fragment>}
+						/>
+						<Route
+							path="/update/:uid"
+							element={<RSVPUpdate />}
+						/>
+					</Routes>
+
+				</section>
+
+				{/* Footer */}
+				<section id="footer">
+					<div className="inner">
+						<ul className="copyright">
+							<li>&copy; <a href="http://www.jonshuster.co.uk">JONATHAN SHUSTER</a></li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+						</ul>
+					</div>
+				</section>
+
+			</div>
+		</Router>
 	)
 }
 
