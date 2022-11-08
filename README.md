@@ -5,6 +5,16 @@ Lightweight backend to store RSVP data developed and hosted in Google App Script
 
 Front end is styled with a Solid State theme by [HTML5 UP](html5up.net), which I've integrated using it's existing CSS and existing JS function to handle the scrolling/menu. Upon further research I did find a react componentised version of theme, however it was a bit too late as I'd already integrated, shout out to [filoxo](https://github.com/filoxo/solid-state-react) and their repo for this should you wish to use it. The main hack to get the existing template's js working as is, was defining a Type Script interface for the 'main' method and calling it from a useEffect hook, such that it executed after the DOM was rendered and the TS compliler/linter was happy. Unrelated to the template, an honorary credit to [rafgraph's Single Page App hack](https://github.com/rafgraph/spa-github-pages) for React Routers for sites hosted on GitHub Pages.
 
+## Project Structure
+- `gas-src/` - Google App Scripts Source, used for the server side elements, namely RSVP Service
+    - Although Google maintains its own versioning and deployment, keeping a copy here for reference
+- `public/` - The static web assets, including the index.html landing page
+    - Keeping the untouched JavaScript from the HTML styling Template here, no 'business' logic here
+- `src/` - All the source for the front end and associated logic
+- `.env`- Environment variables for the service endpoints
+- `.env.development.local` - Not comitted to git, REACT_APP_RSVP_SERVICE_ID is defined here 
+- `.env.development.production` - Not comitted to git, REACT_APP_RSVP_SERVICE_ID is defined here
+
 ## Quick Start
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and therefore in the project directory, you can run:
 
