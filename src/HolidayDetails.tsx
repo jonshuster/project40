@@ -51,7 +51,7 @@ const HolidayDetails = () => {
                     <a href="#overview" className="image"><img src={require('./assets/images/jsheartmorzine.jpg')} alt="" /></a>
                     <div className="content">
                         <p>As you all know I've recently been spending more time in the mountains in the French town of Morzine. I could think of no better place to gather you all to celebrate my 40th birthday and for you to experience the mountains!</p>
-                        <p>There are still {monthsAway()} months to go, but given arranging time off, travel and accommodation to sort, I'd need to get an idea of numbers sooner rather than later.</p>
+                        <p>There are {monthsAway()} months to go, but best to book travel and accommodation sooner rather than later, so please RSVP if you can make it.</p>
                     </div>
                 </div>
             </section>
