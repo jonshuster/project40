@@ -126,19 +126,19 @@ const HolidayDetails = () => {
                         </div>
                         {/* Details - Prices*/}
                         <h2 className="major">Prices</h2>
-                        <p>These are obviously somewhat variable depending on when we book. Accommodation is the largest cost, some will be able to stay at mine, as soon as I know who's coming I'll look to arrange some group accommodation. Based on recent availability, these prices should be enough to give you an idea:</p>
+                        <p>These are obviously somewhat variable depending on when we book. Accommodation is the largest cost, some will be able to stay at mine, as soon as I know who's coming I'll arrange some group accommodation. Based on recent availability, these prices should be enough to give you an idea:</p>
                         <h3>Wed - Sun:</h3>
                         <ul>
                             <li>Flights: £80 &nbsp;<i>(Return Gatwick Easyjet)</i></li>
-                            <li>Accommodation: <CurrencyValue rates={exchangeRates} currency='€' amount={320} /> &nbsp;<i>(Based on sharing, including continental breakfast)</i></li>
+                            <li>Accommodation: <CurrencyValue rates={exchangeRates} currency='€' amount={300} /> &nbsp;<i>(Based on sharing, including continental breakfast)</i></li>
                             <li>Transfers: <CurrencyValue rates={exchangeRates} currency='€' amount={20} /> to <CurrencyValue rates={exchangeRates} currency='€' amount={80} /> &nbsp;<i>(Range from public transport to private transfer)</i></li>
                         </ul>
                         <h3>Activities</h3>
                         <ul>
-                            <li>Downhill MTB Bike Hire, Lesson and Lift Pass: <CurrencyValue rates={exchangeRates} currency='€' amount={100} /></li>
+                            <li>Downhill MTB Bike Hire, Lesson and Lift Pass: <CurrencyValue rates={exchangeRates} currency='€' amount={170} /></li>
                             <li>Lift Pass for Hiking: <CurrencyValue rates={exchangeRates} currency='€' amount={12} /></li>
                             <li>Paddleboard Hire: <CurrencyValue rates={exchangeRates} currency='€' amount={20} /></li>
-                            <li>Rafting or Canyoning: <CurrencyValue rates={exchangeRates} currency='€' amount={50} /></li>
+                            <li>Rafting or Canyoning: <CurrencyValue rates={exchangeRates} currency='€' amount={60} /></li>
                             <li>Zip Line 'Fantasticable': <CurrencyValue rates={exchangeRates} currency='€' amount={35} /></li>
                         </ul>
                     </div>
