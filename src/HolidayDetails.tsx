@@ -51,7 +51,7 @@ const HolidayDetails = () => {
                     <a href="#overview" className="image"><img src={require('./assets/images/jsheartmorzine.jpg')} alt="" /></a>
                     <div className="content">
                         <p>As you all know I've recently been spending more time in the mountains in the French town of Morzine. I could think of no better place to gather you all to celebrate my 40th birthday and for you to experience the mountains!</p>
-                        <p>There are {monthsAway()} months to go, but best to book travel and accommodation sooner rather than later, so please RSVP if you can make it.</p>
+                        <p>There are {monthsAway()} months to go, so please RSVP if you can make it.</p>
                     </div>
                 </div>
             </section>
@@ -91,7 +91,7 @@ const HolidayDetails = () => {
                                     <tr>
                                         <td><b>Morning</b></td>
                                         <td>Travel</td>
-                                        <td>Canyoning / White Water</td>
+                                        <td>White Water Rafting / Chill</td>
                                         <td>Group Hike</td>
                                         <td>Downhill MTB Trails / Pool Day</td>
                                         <td>Goodbye Brunch</td>
@@ -130,7 +130,7 @@ const HolidayDetails = () => {
                         <h3>Wed - Sun:</h3>
                         <ul>
                             <li>Flights: £80 &nbsp;<i>(Return Gatwick Easyjet)</i></li>
-                            <li>Accommodation: <CurrencyValue rates={exchangeRates} currency='€' amount={320} /> &nbsp;<i>(Based on two sharing, including continental breakfast)</i></li>
+                            <li>Accommodation: <CurrencyValue rates={exchangeRates} currency='€' amount={320} /> &nbsp;<i>(Based on sharing, including continental breakfast)</i></li>
                             <li>Transfers: <CurrencyValue rates={exchangeRates} currency='€' amount={20} /> to <CurrencyValue rates={exchangeRates} currency='€' amount={80} /> &nbsp;<i>(Range from public transport to private transfer)</i></li>
                         </ul>
                         <h3>Activities</h3>

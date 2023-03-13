@@ -7,7 +7,7 @@ import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 
 const RSVPUpdate = () => {
     const { uid } = useParams();
-    const [rsvpFormData, setRsvpFormData] = useState({ status: "", plusOne: false, });
+    const [rsvpFormData, setRsvpFormData] = useState({ status: "", plusOne: false, wedActivity: "", satActivity: "" });
     const [rsvpFormStatus, setRsvpFormStatus] = useState({ formSuccessfullySubmitted: false, errorOccurred: false });
     const rsvpHost = process.env.REACT_APP_RSVP_SERVICE_HOST;
 
@@ -32,6 +32,8 @@ const RSVPUpdate = () => {
                 uid: uid,
                 status: rsvpFormData.status,
                 plusOne: rsvpFormData.plusOne,
+                wedActivity: rsvpFormData.wedActivity,
+                satActivity: rsvpFormData.satActivity
             }),
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -57,7 +59,7 @@ const RSVPUpdate = () => {
                     <h2 className="major">RSVP Update</h2>
                     {!rsvpFormStatus.formSuccessfullySubmitted ?
                         <Fragment>
-                            <p>To update your details please select a new value and submit:</p>
+                            <p>To update your details and select activities please confirm if you can make it and submit:</p>
                             <form onSubmit={handleSubmit}>
                                 <div className="row gtr-uniform">
                                     <div className="col-4 col-12-small">
@@ -71,6 +73,23 @@ const RSVPUpdate = () => {
                                     <div className="col-4 col-12-small" style={{ visibility: rsvpFormData.status === "Coming" ? 'visible' : 'hidden' }}>
                                         <input type="checkbox" id="rsvp-plusone" name="plusOne" checked={rsvpFormData.plusOne} onChange={handleChange} />
                                         <label htmlFor="rsvp-plusone">Bringing a plus 1</label>
+                                    </div>
+                                    <div className="col-6 col-12-small" style={{ visibility: rsvpFormData.status === "Coming" ? 'visible' : 'hidden' }}>
+                                        <label htmlFor="wedActivity">Wednesday Activity</label>
+                                        <select id="rsvp-wedActivity" name ="wedActivity" onChange={handleChange} required>
+                                            <option value="">Please select...</option>
+                                            <option value="rafting">White Water Rafting</option>
+                                            <option value="chill">Chill</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-6 col-12-small" style={{ visibility: rsvpFormData.status === "Coming" ? 'visible' : 'hidden' }}>
+                                        <label htmlFor="satActivity">Saturday Activity</label>
+                                        <select id="rsvp-satActivity" name ="satActivity" onChange={handleChange} required>
+                                            <option value="">Please select...</option>
+                                            <option value="trails">MTB Trails</option>
+                                            <option value="explore">MTB Explore</option>
+                                            <option value="pool">Pool Day</option>
+                                        </select>
                                     </div>
                                     <div className="col-12">
                                         <ul className="actions">

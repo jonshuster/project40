@@ -3,6 +3,8 @@ const nameColHeader = 'name';
 const emailColHeader = 'email';
 const statusColHeader = 'status';
 const plusOneColHeader = 'plusOne';
+const wedActivityColHeader = 'wedActivity';
+const satActivityColHeader = 'satActivity';
 const tsColHeader = 'insertTS';
 const tsUpdateColHeader = 'updateTS';
 const shortNameKey = 'shortName';
@@ -47,6 +49,9 @@ function testInsertUpdate(sheet) {
   if (retData[statusColHeader] !== 'Cancelled' || retData[uidColHeader] !== uids[1]) throw Error('Update 5 has returned stale data object');
   retData = updateStatus_(sheet, { uid: uids[3], status: 'Coming', plusOne: true }); // Originally Coming, now with a plus one
   if (retData[statusColHeader] !== 'Coming' || retData[plusOneColHeader] !== true || retData[uidColHeader] !== uids[3]) throw Error('Update 6 has returned stale data object');
+  retData = updateStatus_(sheet, { uid: uids[0], status: 'Coming', wedActivity: 'rafting', satActivity: 'trails' }); // Adding Activities
+  if (retData[statusColHeader] !== 'Coming' || retData[uidColHeader] !== uids[0] || retData[wedActivityColHeader] !== 'rafting' || retData[satActivityColHeader] !== 'trails' ) throw Error('Update 7 has returned stale data object');
+
   if (sheet.getLastRow() != totalRecords) throw Error('Updates has unexpected inserted some cases');
 
   exceptionCount = 0;
@@ -173,12 +178,20 @@ function updateStatus_(sheet, values) {
     throw Error('UID not unique');
   data = data[0];
 
-  //Update Status & Update TS
+  //Update Attendance Status
   var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
   sheet.getRange(data[sheetIndxKey], headers.indexOf(statusColHeader) + 1).setValue(getValue_(values, statusColHeader));
   data[statusColHeader] = getValue_(values, statusColHeader); //Keep our in mem data structure in sync
   sheet.getRange(data[sheetIndxKey], headers.indexOf(plusOneColHeader) + 1).setValue(getValue_(values, plusOneColHeader));
   data[plusOneColHeader] = getValue_(values, plusOneColHeader); //Keep our in mem data structure in sync
+
+  //Update Activities - have't validated these as not any logic dependant on these
+  sheet.getRange(data[sheetIndxKey], headers.indexOf(wedActivityColHeader) + 1).setValue(getValue_(values, wedActivityColHeader));
+  data[wedActivityColHeader] = getValue_(values, wedActivityColHeader); //Keep our in mem data structure in sync
+  sheet.getRange(data[sheetIndxKey], headers.indexOf(satActivityColHeader) + 1).setValue(getValue_(values, satActivityColHeader));
+  data[satActivityColHeader] = getValue_(values, satActivityColHeader); //Keep our in mem data structure in sync
+
+  //Update UpdateTS for audit of all changes
   sheet.getRange(data[sheetIndxKey], headers.indexOf(tsUpdateColHeader) + 1).setValue(new Date());
 
   return data;
@@ -281,12 +294,12 @@ function getConfirmationEmailBody_(values, html) {
   var plainText
   if (values[statusColHeader] === 'Coming') {
     plainText = `Dear ${confirmation.first_name},\n\nThank you for letting me know you${confirmation.plus_one_msg} can join the trip to Morzine for my birthday in August.`;
-    plainText = plainText + "\n\nI am currently aiming for the trip to be from Wednesday 16th August until Sunday 20th August 2023.";
+    plainText = plainText + "\n\nThe trip will be from Wednesday 16th August until Sunday 20th August 2023.";
   }
   else {
     plainText = `Dear ${confirmation.first_name},\n\nSorry to hear you can't join the trip to Morzine for my birthday in August.`;
   }
-  plainText = plainText + "\n\nIf you change your mind update the following page: https://.../project40/update/" + confirmation.uid;
+  plainText = plainText + "\n\nIf you change your mind, or to change activity preferences, update the following page: https://.../project40/update/" + confirmation.uid;
   plainText = plainText + "\n\n-Jon";
 
   return plainText;
@@ -339,6 +352,8 @@ function parseRotaSpreadsheetRow_(headers, row, indx) {
     [emailColHeader]: row[headers.indexOf(emailColHeader)].trim(),
     [nameColHeader]: row[headers.indexOf(nameColHeader)].trim(),
     [statusColHeader]: row[headers.indexOf(statusColHeader)].trim(),
+    [wedActivityColHeader]: row[headers.indexOf(wedActivityColHeader)].trim(),
+    [satActivityColHeader]: row[headers.indexOf(satActivityColHeader)].trim(),
     [plusOneColHeader]: row[headers.indexOf(plusOneColHeader)]
   };
 
@@ -361,6 +376,8 @@ function validateSpreadsheetFormat_(headers) {
     || headers.indexOf(emailColHeader) == -1
     || headers.indexOf(statusColHeader) == -1
     || headers.indexOf(plusOneColHeader) == -1
+    || headers.indexOf(wedActivityColHeader) == -1
+    || headers.indexOf(satActivityColHeader) == -1
     || headers.indexOf(tsColHeader) == -1)
     throw Error("Internal Error - Datasheet missing key columns, cannot insert.");
 }
