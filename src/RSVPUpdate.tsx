@@ -7,7 +7,7 @@ import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 
 const RSVPUpdate = () => {
     const { uid } = useParams();
-    const [rsvpFormData, setRsvpFormData] = useState({ status: "", plusOne: false, wedActivity: "", satActivity: "" });
+    const [rsvpFormData, setRsvpFormData] = useState({ status: "", plusOne: false, wedActivity: "", satActivity: "", cmheight: ""});
     const [rsvpFormStatus, setRsvpFormStatus] = useState({ formSuccessfullySubmitted: false, errorOccurred: false });
     const rsvpHost = process.env.REACT_APP_RSVP_SERVICE_HOST;
 
@@ -33,7 +33,8 @@ const RSVPUpdate = () => {
                 status: rsvpFormData.status,
                 plusOne: rsvpFormData.plusOne,
                 wedActivity: rsvpFormData.wedActivity,
-                satActivity: rsvpFormData.satActivity
+                satActivity: rsvpFormData.satActivity,
+                cmheight: rsvpFormData.cmheight
             }),
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -74,22 +75,29 @@ const RSVPUpdate = () => {
                                         <input type="checkbox" id="rsvp-plusone" name="plusOne" checked={rsvpFormData.plusOne} onChange={handleChange} />
                                         <label htmlFor="rsvp-plusone">Bringing a plus 1</label>
                                     </div>
-                                    <div className="col-6 col-12-small" style={{ visibility: rsvpFormData.status === "Coming" ? 'visible' : 'hidden' }}>
+                                    <div className="col-4 col-12-small" style={{ visibility: rsvpFormData.status === "Coming" ? 'visible' : 'hidden' }}>
                                         <label htmlFor="wedActivity">Wednesday Activity</label>
-                                        <select id="rsvp-wedActivity" name ="wedActivity" onChange={handleChange} required>
+                                        <select id="rsvp-wedActivity" name ="wedActivity" onChange={handleChange} required={rsvpFormData.status === "Coming"}>
                                             <option value="">Please select...</option>
                                             <option value="rafting">White Water Rafting</option>
                                             <option value="chill">Chill</option>
                                         </select>
                                     </div>
-                                    <div className="col-6 col-12-small" style={{ visibility: rsvpFormData.status === "Coming" ? 'visible' : 'hidden' }}>
+                                    <div className="col-4 col-12-small" style={{ visibility: rsvpFormData.status === "Coming" ? 'visible' : 'hidden' }}>
                                         <label htmlFor="satActivity">Saturday Activity</label>
-                                        <select id="rsvp-satActivity" name ="satActivity" onChange={handleChange} required>
+                                        <select id="rsvp-satActivity" name ="satActivity" onChange={handleChange} required={rsvpFormData.status === "Coming"}>
                                             <option value="">Please select...</option>
                                             <option value="trails">MTB Trails</option>
                                             <option value="explore">MTB Explore</option>
                                             <option value="pool">Pool Day</option>
                                         </select>
+                                    </div>
+                                    <div className="col-4 col-12-small" style={{ visibility: rsvpFormData.status === "Coming" && 
+                                                                                (rsvpFormData.satActivity === "trails" || rsvpFormData.satActivity === "explore" )
+                                                                                ? 'visible' : 'hidden' }}>
+                                        <label htmlFor="cmheight">Height (cm)</label>
+                                        <input type="number" min='122' max='241' id="rsvp-cmheight" name ="cmheight" value={rsvpFormData.cmheight} onChange={handleChange} 
+                                               required={(rsvpFormData.satActivity === "trails" || rsvpFormData.satActivity === "explore" )}/>
                                     </div>
                                     <div className="col-12">
                                         <ul className="actions">

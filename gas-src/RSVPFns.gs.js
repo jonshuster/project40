@@ -5,11 +5,12 @@ const statusColHeader = 'status';
 const plusOneColHeader = 'plusOne';
 const wedActivityColHeader = 'wedActivity';
 const satActivityColHeader = 'satActivity';
+const cmheightColHeader = 'cmheight';
 const tsColHeader = 'insertTS';
 const tsUpdateColHeader = 'updateTS';
 const shortNameKey = 'shortName';
-const actionKey = 'action'
-const sheetIndxKey = 'sheetRowNum'
+const actionKey = 'action';
+const sheetIndxKey = 'sheetRowNum';
 
 function testInsertUpdate(sheet) {
   //Valid
@@ -49,8 +50,8 @@ function testInsertUpdate(sheet) {
   if (retData[statusColHeader] !== 'Cancelled' || retData[uidColHeader] !== uids[1]) throw Error('Update 5 has returned stale data object');
   retData = updateStatus_(sheet, { uid: uids[3], status: 'Coming', plusOne: true }); // Originally Coming, now with a plus one
   if (retData[statusColHeader] !== 'Coming' || retData[plusOneColHeader] !== true || retData[uidColHeader] !== uids[3]) throw Error('Update 6 has returned stale data object');
-  retData = updateStatus_(sheet, { uid: uids[0], status: 'Coming', wedActivity: 'rafting', satActivity: 'trails' }); // Adding Activities
-  if (retData[statusColHeader] !== 'Coming' || retData[uidColHeader] !== uids[0] || retData[wedActivityColHeader] !== 'rafting' || retData[satActivityColHeader] !== 'trails' ) throw Error('Update 7 has returned stale data object');
+  retData = updateStatus_(sheet, { uid: uids[0], status: 'Coming', wedActivity: 'rafting', satActivity: 'trails', cmheight:'150' }); // Adding Activities
+  if (retData[statusColHeader] !== 'Coming' || retData[uidColHeader] !== uids[0] || retData[wedActivityColHeader] !== 'rafting' || retData[satActivityColHeader] !== 'trails' || retData[cmheightColHeader] !== '150' ) throw Error('Update 7 has returned stale data object');
 
   if (sheet.getLastRow() != totalRecords) throw Error('Updates has unexpected inserted some cases');
 
@@ -61,7 +62,7 @@ function testInsertUpdate(sheet) {
   try { updateStatus_(sheet, { uid: uids[0] }) } catch (err) { exceptionCount++ };
   if (exceptionCount != 4) throw Error('Tests excepted to catch 4 exceptions');
 
-  Logger.log("TEST- testInsertUpdate - Testing Complete");
+  Logger.log("TEST - testInsertUpdate - Testing Complete");
 }
 
 function testEmail() {
@@ -76,6 +77,14 @@ function testEmail() {
 
   Logger.log("TEST - testEmail - Case 4: Can't Attend");
   sendConfirmationEmail_({ name: 'Mikey', email: '...@....co.uk', plusOne: false, status: 'Coming', uid: 'az0123za' });
+
+  Logger.log("TEST - testEmail - Testing Complete");
+}
+
+function testGetData(sheet) {
+  Logger.log("TEST - testGetData");
+  getAttendees(sheet)
+  Logger.log("TEST - testGetData - Testing Complete");
 }
 
 /**
@@ -190,6 +199,8 @@ function updateStatus_(sheet, values) {
   data[wedActivityColHeader] = getValue_(values, wedActivityColHeader); //Keep our in mem data structure in sync
   sheet.getRange(data[sheetIndxKey], headers.indexOf(satActivityColHeader) + 1).setValue(getValue_(values, satActivityColHeader));
   data[satActivityColHeader] = getValue_(values, satActivityColHeader); //Keep our in mem data structure in sync
+  sheet.getRange(data[sheetIndxKey], headers.indexOf(cmheightColHeader) + 1).setValue(getValue_(values, cmheightColHeader));
+  data[cmheightColHeader] = getValue_(values, cmheightColHeader); //Keep our in mem data structure in sync
 
   //Update UpdateTS for audit of all changes
   sheet.getRange(data[sheetIndxKey], headers.indexOf(tsUpdateColHeader) + 1).setValue(new Date());
@@ -354,6 +365,7 @@ function parseRotaSpreadsheetRow_(headers, row, indx) {
     [statusColHeader]: row[headers.indexOf(statusColHeader)].trim(),
     [wedActivityColHeader]: row[headers.indexOf(wedActivityColHeader)].trim(),
     [satActivityColHeader]: row[headers.indexOf(satActivityColHeader)].trim(),
+    [cmheightColHeader]: row[headers.indexOf(cmheightColHeader)],
     [plusOneColHeader]: row[headers.indexOf(plusOneColHeader)]
   };
 
@@ -378,6 +390,7 @@ function validateSpreadsheetFormat_(headers) {
     || headers.indexOf(plusOneColHeader) == -1
     || headers.indexOf(wedActivityColHeader) == -1
     || headers.indexOf(satActivityColHeader) == -1
+    || headers.indexOf(cmheightColHeader) == -1
     || headers.indexOf(tsColHeader) == -1)
     throw Error("Internal Error - Datasheet missing key columns, cannot insert.");
 }

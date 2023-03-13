@@ -26,11 +26,14 @@
    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
    return Project40.doGet(sheet);
  }
-
+ 
  /**
- * Wrapper function for to link testing to a Dev/QA DataSource
- */
-function testInsertUpdate() {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
-  return Project40.testInsertUpdate(sheet)
-}
+  * Wrapper function for to link testing to a Dev/QA DataSource
+  */
+ function runTests() {
+   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+   Project40.testInsertUpdate(sheet);
+ 
+   Project40.testGetData(sheet);
+ }
+ 
