@@ -67,23 +67,23 @@ function testInsertUpdate(sheet) {
 
 function testEmail() {
   Logger.log("TEST - testEmail - Case 1: Single Attendee");
-  sendConfirmationEmail_({ name: 'Charlie Smith', email: '...@....co.uk', plusOne: false, status: 'Coming', uid: 'az0123za' });
+  sendConfirmationEmail_({ name: 'Charlie Smith', email: '...@....co.uk', plusOne: false, status: 'Coming', uid: 'az0123za' }, false);
 
   Logger.log("TEST - testEmail - Case 2: Attendee with Plus One");
-  sendConfirmationEmail_({ name: 'Charlie Smith', email: '...@....co.uk', plusOne: true, status: 'Coming', uid: 'az0123za' });
+  sendConfirmationEmail_({ name: 'Charlie Smith', email: '...@....co.uk', plusOne: true, status: 'Coming', uid: 'az0123za' }, false);
 
   Logger.log("TEST - testEmail - Case 3: Can't Attend");
-  sendConfirmationEmail_({ name: 'Ali Thomas', email: '...@....co.uk', plusOne: false, status: 'Not Coming', uid: 'az0123za' });
+  sendConfirmationEmail_({ name: 'Ali Thomas', email: '...@....co.uk', plusOne: false, status: 'Not Coming', uid: 'az0123za' }, false);
 
   Logger.log("TEST - testEmail - Case 4: Can't Attend");
-  sendConfirmationEmail_({ name: 'Mikey', email: '...@....co.uk', plusOne: false, status: 'Coming', uid: 'az0123za' });
+  sendConfirmationEmail_({ name: 'Mikey', email: '...@....co.uk', plusOne: false, status: 'Coming', uid: 'az0123za' }, false);
 
   Logger.log("TEST - testEmail - Testing Complete");
 }
 
 function testGetData(sheet) {
   Logger.log("TEST - testGetData");
-  getAttendees(sheet)
+  getAttendees(sheet, false)
   Logger.log("TEST - testGetData - Testing Complete");
 }
 
@@ -138,10 +138,24 @@ function doPost(event, sheet) {
  */
 function doGet(sheet) {
   Logger.log("INFO - doGet called");
-  var attendees = getAttendees(sheet);
+  var attendees = getAttendees(sheet, false); //False - only expose limited data
   Logger.log("DEBUG - Returning %s attendees %s", attendees.length, attendees);
   return ContentService.createTextOutput(JSON.stringify(attendees))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * Utility to send out reminder emails to all attendees so they have the 
+ * update link (with their UID) to hand to update their details.
+ */
+function sendReminderEmails(sheet) {
+  Logger.log("INFO - sendReminderEmails called");
+  var attendees = getAttendees(sheet, true);
+  Logger.log("DEBUG - %s attendees coming to be emailed reminders", attendees.length);
+
+  attendees.forEach( attendee => sendConfirmationEmail_(attendee, true) );
+
+  Logger.log("INFO - sendReminderEmails Done");
 }
 
 /**
@@ -152,11 +166,11 @@ function processPostEvent_(postData, sheet) {
   if (postData[actionKey] == 'new') {
     uid = insertNewData_(sheet, postData)[0];
     postData[uidColHeader] = uid;
-    sendConfirmationEmail_(postData);
+    sendConfirmationEmail_(postData, false);
     respDetails = { 'id': uid };
   } else if (postData[actionKey] == 'update') {
     data = updateStatus_(sheet, postData);
-    sendConfirmationEmail_(data);
+    sendConfirmationEmail_(data, false);
     respDetails = { 'id': data[uidColHeader] };
   } else {
     throw Error('Action not specified or invalid');
@@ -248,11 +262,11 @@ function getValue_(values, header) {
 /**
  * Sends either an Attending vs Not Attending email to the Attendee
  */
-function sendConfirmationEmail_(values) {
+function sendConfirmationEmail_(values, reminder) {
 
   var message = {
     to: values[emailColHeader],
-    subject: "Jon's 40th Birthday Confirmation",
+    subject: reminder ? "Jon's 40th Birthday Reminder" : "Jon's 40th Birthday Confirmation",
     htmlBody: getConfirmationEmailBody_(values, true),
     body: getConfirmationEmailBody_(values, false),
     replyTo: "...",
@@ -288,6 +302,8 @@ function getConfirmationEmailBody_(values, html) {
   confirmation.first_name = values[nameColHeader].includes(' ') ? values[nameColHeader].slice(0, values[nameColHeader].indexOf(' ')) : values[nameColHeader];
   confirmation.plus_one_msg = values[plusOneColHeader] ? ', and your plus one,' : '';
   confirmation.uid = values[uidColHeader];
+  confirmation.wed_activity = values[wedActivityColHeader] || 'Not Yet Specified';
+  confirmation.sat_activity = values[satActivityColHeader] || 'Not Yet Specified';
 
   if (html) {
     var template;
@@ -310,7 +326,7 @@ function getConfirmationEmailBody_(values, html) {
   else {
     plainText = `Dear ${confirmation.first_name},\n\nSorry to hear you can't join the trip to Morzine for my birthday in August.`;
   }
-  plainText = plainText + "\n\nIf you change your mind, or to change activity preferences, update the following page: https://.../project40/update/" + confirmation.uid;
+  plainText = plainText + "\n\nTo update your activity options, or if you can no longer make it, update the following page: https://.../project40/update/" + confirmation.uid;
   plainText = plainText + "\n\n-Jon";
 
   return plainText;
@@ -319,7 +335,7 @@ function getConfirmationEmailBody_(values, html) {
 /**
  * Gets the names of those attending and their guests
  */
-function getAttendees(sheet) {
+function getAttendees(sheet, fullResults) {
   var data = getSpreadsheetData_(sheet);
 
   //Remove Dupes
@@ -330,7 +346,10 @@ function getAttendees(sheet) {
 
   //Remove Not Coming, also don't expose any sensitive (full name / email etc.) data items externally
   data = data.filter(data => data[statusColHeader] == 'Coming')
-    .map(data => ({ [shortNameKey]: data[shortNameKey], [plusOneColHeader]: data[plusOneColHeader] }));
+  if( !fullResults )
+  {
+      data.map(data => ({ [shortNameKey]: data[shortNameKey], [plusOneColHeader]: data[plusOneColHeader] }));
+  };
 
   return data;
 }

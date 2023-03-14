@@ -27,6 +27,15 @@
    return Project40.doGet(sheet);
  }
  
+/**
+ * Utility to be manually run when required
+ */
+ function sendReminderEmails() {
+  Logger.log("INFO - sendReminderEmails Dev Wrapper called");
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+  return Project40.sendReminderEmails(sheet);
+}
+
  /**
   * Wrapper function for to link testing to a Dev/QA DataSource
   */

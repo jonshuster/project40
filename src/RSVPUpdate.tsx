@@ -79,26 +79,26 @@ const RSVPUpdate = () => {
                                         <label htmlFor="wedActivity">Wednesday Activity</label>
                                         <select id="rsvp-wedActivity" name ="wedActivity" onChange={handleChange} required={rsvpFormData.status === "Coming"}>
                                             <option value="">Please select...</option>
-                                            <option value="rafting">White Water Rafting</option>
-                                            <option value="ferrata">Via Ferrata</option>
-                                            <option value="chill">Chill</option>
+                                            <option value="Rafting">White Water Rafting</option>
+                                            <option value="Ferrata">Via Ferrata</option>
+                                            <option value="Chill">Chill</option>
                                         </select>
                                     </div>
                                     <div className="col-4 col-12-small" style={{ visibility: rsvpFormData.status === "Coming" ? 'visible' : 'hidden' }}>
                                         <label htmlFor="satActivity">Saturday Activity</label>
                                         <select id="rsvp-satActivity" name ="satActivity" onChange={handleChange} required={rsvpFormData.status === "Coming"}>
                                             <option value="">Please select...</option>
-                                            <option value="trails">MTB Trails</option>
-                                            <option value="explore">MTB Explore</option>
-                                            <option value="pool">Pool Day</option>
+                                            <option value="MTB Trails">MTB Trails</option>
+                                            <option value="MTB Explore">MTB Explore</option>
+                                            <option value="Pool">Pool Day</option>
                                         </select>
                                     </div>
                                     <div className="col-4 col-12-small" style={{ visibility: rsvpFormData.status === "Coming" && 
-                                                                                (rsvpFormData.satActivity === "trails" || rsvpFormData.satActivity === "explore" )
+                                                                                (rsvpFormData.satActivity === "MTB Trails" || rsvpFormData.satActivity === "MTB Explore" )
                                                                                 ? 'visible' : 'hidden' }}>
                                         <label htmlFor="cmheight">Height (cm)</label>
                                         <input type="number" min='122' max='241' id="rsvp-cmheight" name ="cmheight" value={rsvpFormData.cmheight} onChange={handleChange} 
-                                               required={(rsvpFormData.satActivity === "trails" || rsvpFormData.satActivity === "explore" )}/>
+                                               required={(rsvpFormData.satActivity === "MTB Trails" || rsvpFormData.satActivity === "MTB Explore" )}/>
                                     </div>
                                     <div className="col-12">
                                         <ul className="actions">
