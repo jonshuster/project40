@@ -80,6 +80,7 @@ const RSVPUpdate = () => {
                                         <select id="rsvp-wedActivity" name ="wedActivity" onChange={handleChange} required={rsvpFormData.status === "Coming"}>
                                             <option value="">Please select...</option>
                                             <option value="rafting">White Water Rafting</option>
+                                            <option value="ferrata">Via Ferrata</option>
                                             <option value="chill">Chill</option>
                                         </select>
                                     </div>
