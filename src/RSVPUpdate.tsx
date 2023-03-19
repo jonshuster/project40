@@ -7,7 +7,7 @@ import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 
 const RSVPUpdate = () => {
     const { uid } = useParams();
-    const [rsvpFormData, setRsvpFormData] = useState({ status: "", plusOne: false, wedActivity: "", satActivity: "", cmheight: ""});
+    const [rsvpFormData, setRsvpFormData] = useState({ status: "", plusOne: false, thuActivity: "", satActivity: "", cmheight: ""});
     const [rsvpFormStatus, setRsvpFormStatus] = useState({ formSuccessfullySubmitted: false, errorOccurred: false });
     const rsvpHost = process.env.REACT_APP_RSVP_SERVICE_HOST;
 
@@ -32,7 +32,7 @@ const RSVPUpdate = () => {
                 uid: uid,
                 status: rsvpFormData.status,
                 plusOne: rsvpFormData.plusOne,
-                wedActivity: rsvpFormData.wedActivity,
+                thuActivity: rsvpFormData.thuActivity,
                 satActivity: rsvpFormData.satActivity,
                 cmheight: rsvpFormData.cmheight
             }),
@@ -76,8 +76,8 @@ const RSVPUpdate = () => {
                                         <label htmlFor="rsvp-plusone">Bringing a plus 1</label>
                                     </div>
                                     <div className="col-4 col-12-small" style={{ visibility: rsvpFormData.status === "Coming" ? 'visible' : 'hidden' }}>
-                                        <label htmlFor="wedActivity">Wednesday Activity</label>
-                                        <select id="rsvp-wedActivity" name ="wedActivity" onChange={handleChange} required={rsvpFormData.status === "Coming"}>
+                                        <label htmlFor="thuActivity">Thursday Activity</label>
+                                        <select id="rsvp-thuActivity" name ="thuActivity" onChange={handleChange} required={rsvpFormData.status === "Coming"}>
                                             <option value="">Please select...</option>
                                             <option value="Rafting">White Water Rafting</option>
                                             <option value="Ferrata">Via Ferrata</option>

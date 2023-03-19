@@ -3,7 +3,7 @@ const nameColHeader = 'name';
 const emailColHeader = 'email';
 const statusColHeader = 'status';
 const plusOneColHeader = 'plusOne';
-const wedActivityColHeader = 'wedActivity';
+const thuActivityColHeader = 'thuActivity';
 const satActivityColHeader = 'satActivity';
 const cmheightColHeader = 'cmheight';
 const tsColHeader = 'insertTS';
@@ -50,8 +50,8 @@ function testInsertUpdate(sheet) {
   if (retData[statusColHeader] !== 'Cancelled' || retData[uidColHeader] !== uids[1]) throw Error('Update 5 has returned stale data object');
   retData = updateStatus_(sheet, { uid: uids[3], status: 'Coming', plusOne: true }); // Originally Coming, now with a plus one
   if (retData[statusColHeader] !== 'Coming' || retData[plusOneColHeader] !== true || retData[uidColHeader] !== uids[3]) throw Error('Update 6 has returned stale data object');
-  retData = updateStatus_(sheet, { uid: uids[0], status: 'Coming', wedActivity: 'rafting', satActivity: 'trails', cmheight:'150' }); // Adding Activities
-  if (retData[statusColHeader] !== 'Coming' || retData[uidColHeader] !== uids[0] || retData[wedActivityColHeader] !== 'rafting' || retData[satActivityColHeader] !== 'trails' || retData[cmheightColHeader] !== '150' ) throw Error('Update 7 has returned stale data object');
+  retData = updateStatus_(sheet, { uid: uids[0], status: 'Coming', thuActivity: 'rafting', satActivity: 'trails', cmheight:'150' }); // Adding Activities
+  if (retData[statusColHeader] !== 'Coming' || retData[uidColHeader] !== uids[0] || retData[thuActivityColHeader] !== 'rafting' || retData[satActivityColHeader] !== 'trails' || retData[cmheightColHeader] !== '150' ) throw Error('Update 7 has returned stale data object');
 
   if (sheet.getLastRow() != totalRecords) throw Error('Updates has unexpected inserted some cases');
 
@@ -209,8 +209,8 @@ function updateStatus_(sheet, values) {
   data[plusOneColHeader] = getValue_(values, plusOneColHeader); //Keep our in mem data structure in sync
 
   //Update Activities - have't validated these as not any logic dependant on these
-  sheet.getRange(data[sheetIndxKey], headers.indexOf(wedActivityColHeader) + 1).setValue(getValue_(values, wedActivityColHeader));
-  data[wedActivityColHeader] = getValue_(values, wedActivityColHeader); //Keep our in mem data structure in sync
+  sheet.getRange(data[sheetIndxKey], headers.indexOf(thuActivityColHeader) + 1).setValue(getValue_(values, thuActivityColHeader));
+  data[thuActivityColHeader] = getValue_(values, thuActivityColHeader); //Keep our in mem data structure in sync
   sheet.getRange(data[sheetIndxKey], headers.indexOf(satActivityColHeader) + 1).setValue(getValue_(values, satActivityColHeader));
   data[satActivityColHeader] = getValue_(values, satActivityColHeader); //Keep our in mem data structure in sync
   sheet.getRange(data[sheetIndxKey], headers.indexOf(cmheightColHeader) + 1).setValue(getValue_(values, cmheightColHeader));
@@ -302,7 +302,7 @@ function getConfirmationEmailBody_(values, html) {
   confirmation.first_name = values[nameColHeader].includes(' ') ? values[nameColHeader].slice(0, values[nameColHeader].indexOf(' ')) : values[nameColHeader];
   confirmation.plus_one_msg = values[plusOneColHeader] ? ', and your plus one,' : '';
   confirmation.uid = values[uidColHeader];
-  confirmation.wed_activity = values[wedActivityColHeader] || 'Not Yet Specified';
+  confirmation.thu_activity = values[thuActivityColHeader] || 'Not Yet Specified';
   confirmation.sat_activity = values[satActivityColHeader] || 'Not Yet Specified';
 
   if (html) {
@@ -382,7 +382,7 @@ function parseRotaSpreadsheetRow_(headers, row, indx) {
     [emailColHeader]: row[headers.indexOf(emailColHeader)].trim(),
     [nameColHeader]: row[headers.indexOf(nameColHeader)].trim(),
     [statusColHeader]: row[headers.indexOf(statusColHeader)].trim(),
-    [wedActivityColHeader]: row[headers.indexOf(wedActivityColHeader)].trim(),
+    [thuActivityColHeader]: row[headers.indexOf(thuActivityColHeader)].trim(),
     [satActivityColHeader]: row[headers.indexOf(satActivityColHeader)].trim(),
     [cmheightColHeader]: row[headers.indexOf(cmheightColHeader)],
     [plusOneColHeader]: row[headers.indexOf(plusOneColHeader)]
@@ -407,7 +407,7 @@ function validateSpreadsheetFormat_(headers) {
     || headers.indexOf(emailColHeader) == -1
     || headers.indexOf(statusColHeader) == -1
     || headers.indexOf(plusOneColHeader) == -1
-    || headers.indexOf(wedActivityColHeader) == -1
+    || headers.indexOf(thuActivityColHeader) == -1
     || headers.indexOf(satActivityColHeader) == -1
     || headers.indexOf(cmheightColHeader) == -1
     || headers.indexOf(tsColHeader) == -1)
