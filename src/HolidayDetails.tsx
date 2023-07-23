@@ -10,7 +10,8 @@ const HolidayDetails = () => {
         const birthday = new Date(2023, 7, 17); //7 = August (months start at zero)
         const monthDiff = birthday.getMonth() - today.getMonth() +
             (12 * (birthday.getFullYear() - today.getFullYear()));
-        return monthDiff;
+        const dayDiff = Math.ceil( Math.abs(birthday.getTime() - today.getTime()) / (1000 * 3600 * 24)); // Div by Milliseconds in a day 
+        return [monthDiff, dayDiff];
     }
 
     const [exchangeRates, setExchangeRates] = useState({});
@@ -51,7 +52,8 @@ const HolidayDetails = () => {
                     <a href="#overview" className="image"><img src={require('./assets/images/jsheartmorzine.jpg')} alt="" /></a>
                     <div className="content">
                         <p>As you all know I've recently been spending more time in the mountains in the French town of Morzine. I could think of no better place to gather you all to celebrate my 40th birthday and for you to experience the mountains!</p>
-                        <p>There are {monthsAway()} months to go, so please RSVP if you can make it.</p>
+                        <p>{ monthsAway()[0] > 1 ? <Fragment>There are {monthsAway()[0]} months to go, so please RSVP if you can make it.</Fragment>:
+                                                   <Fragment>Only {monthsAway()[1]} days to go!</Fragment>}</p>
                     </div>
                 </div>
             </section>
@@ -91,7 +93,7 @@ const HolidayDetails = () => {
                                     <tr>
                                         <td><b>Morning</b></td>
                                         <td>Travel</td>
-                                        <td>White Water Rafting / Chill</td>
+                                        <td>Cascade Adventure / Chill</td>
                                         <td>Group Hike</td>
                                         <td>Downhill MTB Trails / Pool Day</td>
                                         <td>Goodbye Brunch</td>
@@ -139,6 +141,7 @@ const HolidayDetails = () => {
                             <li>Lift Pass for Hiking: <CurrencyValue rates={exchangeRates} currency='€' amount={12} /></li>
                             <li>Paddleboard Hire: <CurrencyValue rates={exchangeRates} currency='€' amount={20} /></li>
                             <li>Rafting or Canyoning: <CurrencyValue rates={exchangeRates} currency='€' amount={60} /></li>
+                            <li>Cascade Adventure: <CurrencyValue rates={exchangeRates} currency='€' amount={30} /></li>
                             <li>Zip Line 'Fantasticable': <CurrencyValue rates={exchangeRates} currency='€' amount={35} /></li>
                         </ul>
                     </div>
