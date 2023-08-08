@@ -10,7 +10,8 @@ const HolidayDetails = () => {
         const birthday = new Date(2023, 7, 17); //7 = August (months start at zero)
         const monthDiff = birthday.getMonth() - today.getMonth() +
             (12 * (birthday.getFullYear() - today.getFullYear()));
-        const dayDiff = Math.ceil( Math.abs(birthday.getTime() - today.getTime()) / (1000 * 3600 * 24)); // Div by Milliseconds in a day 
+        var dayDiff = Math.ceil( Math.abs(birthday.getTime() - today.getTime()) / (1000 * 3600 * 24)); // Div by Milliseconds in a day
+        if (today.getTime() > birthday.getTime()) dayDiff *= -1; 
         return [monthDiff, dayDiff];
     }
 
@@ -53,7 +54,7 @@ const HolidayDetails = () => {
                     <div className="content">
                         <p>As you all know I've recently been spending more time in the mountains in the French town of Morzine. I could think of no better place to gather you all to celebrate my 40th birthday and for you to experience the mountains!</p>
                         <p>{ monthsAway()[0] > 1 ? <Fragment>There are {monthsAway()[0]} months to go, so please RSVP if you can make it.</Fragment>:
-                                                   <Fragment>Only {monthsAway()[1]} days to go!</Fragment>}</p>
+                             monthsAway()[1] > 1 ? <Fragment>Only {monthsAway()[1]} days to go!</Fragment>:<Fragment/>}</p>
                     </div>
                 </div>
             </section>
